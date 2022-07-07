@@ -56,8 +56,8 @@ pg_exec() {
 }
 
 gen_password() {
-  # Return a random 32 character base64 string (alphanumeric and + /)
-  size=${1:-32}
+  # Print a random 32 character string  /[a-zA-Z0-9_-]{32}/
+  size="${1:-32}"
   openssl rand -base64 "$size" | head -c "$size" | tr '/' '-' | tr '+' '_'
 }
 
@@ -162,6 +162,8 @@ EOF
     }
 EOF
   echo
+
+  ./generate-dashboards.sh "$METRICS_ENVIRONMENT" "$GRAFANA_HANDLE"
 
   echo
   echo "Log into Grafana at ${grafana_url} with username admin and password ${GRAFANA_ADMIN_PASSWORD}"
