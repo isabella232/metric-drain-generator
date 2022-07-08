@@ -286,7 +286,7 @@
           {
             "alias": "$tag_environment - $tag_database",
             "hide": false,
-            "query": "SELECT MEAN(\"milli_cpu_usage\") / 1000\nFROM \"metrics\"\nWHERE $timeFilter\nAND \"environment\" =~ /^$environment$/\nAND \"database\" =~ /^$database$/\nGROUP BY\n        time($__interval),\n        \"environment\", \"database\"\n        fill(null)",
+            "query": "SELECT MAX(\"milli_cpu_usage\") / 1000\nFROM \"metrics\"\nWHERE $timeFilter\nAND \"environment\" =~ /^$environment$/\nAND \"database\" =~ /^$database$/\nGROUP BY\n        time($__interval),\n        \"environment\", \"database\"\n        fill(null)",
             "rawQuery": true,
             "refId": "A",
             "resultFormat": "time_series"
@@ -380,7 +380,7 @@
           {
             "alias": "$tag_environment - $tag_database",
             "hide": false,
-            "query": "SELECT (MEAN(\"milli_cpu_usage\") / 1000) / (MAX(\"memory_limit_mb\") / 4096)\nFROM \"metrics\"\nWHERE $timeFilter\nAND \"environment\" =~ /^$environment$/\nAND \"database\" =~ /^$database$/\nGROUP BY\n        time($__interval),\n        \"environment\", \"database\"\n        fill(null)",
+            "query": "SELECT (MAX(\"milli_cpu_usage\") / 1000) / (MAX(\"memory_limit_mb\") / 4096)\nFROM \"metrics\"\nWHERE $timeFilter\nAND \"environment\" =~ /^$environment$/\nAND \"database\" =~ /^$database$/\nGROUP BY\n        time($__interval),\n        \"environment\", \"database\"\n        fill(null)",
             "rawQuery": true,
             "refId": "A",
             "resultFormat": "time_series"

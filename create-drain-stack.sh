@@ -116,7 +116,7 @@ if ! aptible config --environment "$METRICS_ENVIRONMENT" --app "${GRAFANA_HANDLE
     GRANT ALL PRIVILEGES ON DATABASE db, sessions to "${GRAFANA_DB_USER}";
 EOF
 
-  # Set up Grafana
+  echo 'Creating Grafana app...'
   parse_url "$pg_url"
   aptible apps:create --environment "$METRICS_ENVIRONMENT" "$GRAFANA_HANDLE"
   aptible deploy --environment "$METRICS_ENVIRONMENT" --app "$GRAFANA_HANDLE" --docker-image "grafana/grafana:${GRAFANA_IMAGE}" \
@@ -134,6 +134,7 @@ EOF
     "GF_DATABASE_SSL_MODE=require" \
     "FORCE_SSL=true"
 
+  echo 'Creating default endpoint for Grafana...'
   grafana_url="https://$(
     aptible endpoints:https:create --environment "$METRICS_ENVIRONMENT" --app "$GRAFANA_HANDLE" cmd --default-domain |
     grep -E -o 'app-[0-9]+\.on-aptible\.com'
@@ -141,7 +142,7 @@ EOF
 
   aptible config:set --environment "$METRICS_ENVIRONMENT" --app "$GRAFANA_HANDLE" "GF_SERVER_ROOT_URL=${grafana_url}"
 
-  # Create the data source
+  echo 'Creating InfluxDB data source...'
   parse_url "$influx_url"
   basic_auth="admin:${GRAFANA_ADMIN_PASSWORD}"
   influx_source_uid="aptible-gen-influx-source"
@@ -163,7 +164,7 @@ EOF
 EOF
   echo
 
-  ./generate-dashboards.sh "$METRICS_ENVIRONMENT" "$GRAFANA_HANDLE"
+  GRAFANA_URL="${grafana_url}" GRAFANA_USER='admin' GRAFANA_PASSWORD="${GRAFANA_ADMIN_PASSWORD}" ./generate-dashboards.sh
 
   echo
   echo "Log into Grafana at ${grafana_url} with username admin and password ${GRAFANA_ADMIN_PASSWORD}"

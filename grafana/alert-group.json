@@ -1,0 +1,463 @@
+{
+  "name": "aptible-generated",
+  "interval": "1m",
+  "rules": [
+    {
+    "for": "3m",
+    "annotations": {
+      "__dashboardUid__": "aptible-gen-app-dash",
+      "__panelId__": "5"
+    },
+    "grafana_alert": {
+      "title": "App CPU Utilization",
+      "condition": "C",
+      "data": [
+        {
+          "refId": "A",
+          "queryType": "",
+          "relativeTimeRange": {
+            "from": 300,
+            "to": 0
+          },
+          "datasourceUid": "aptible-gen-influx-source",
+          "model": {
+            "alias": "$tag_environment - $tag_app - $tag_service - $tag_host",
+            "datasource": {
+              "type": "influxdb",
+              "uid": "aptible-gen-influx-source"
+            },
+            "hide": false,
+            "intervalMs": 1000,
+            "limit": "",
+            "maxDataPoints": 43200,
+            "measurement": "",
+            "policy": "",
+            "query": "SELECT (MAX(\"milli_cpu_usage\") / 1000) / (MAX(\"memory_limit_mb\") / 4096)\nFROM \"metrics\"\nWHERE $timeFilter\nAND \"app\" != \"\"\nGROUP BY\n        time($__interval),\n        \"environment\", \"app\", \"service\", \"host\"",
+            "rawQuery": true,
+            "refId": "A",
+            "resultFormat": "time_series",
+            "slimit": "",
+            "tz": ""
+          }
+        },
+        {
+          "refId": "B",
+          "queryType": "",
+          "relativeTimeRange": {
+            "from": 0,
+            "to": 0
+          },
+          "datasourceUid": "-100",
+          "model": {
+            "datasource": {
+              "type": "__expr__",
+              "uid": "-100"
+            },
+            "expression": "A",
+            "hide": false,
+            "intervalMs": 1000,
+            "maxDataPoints": 43200,
+            "reducer": "last",
+            "refId": "B",
+            "settings": {
+              "mode": "dropNN"
+            },
+            "type": "reduce"
+          }
+        },
+        {
+          "refId": "C",
+          "queryType": "",
+          "relativeTimeRange": {
+            "from": 0,
+            "to": 0
+          },
+          "datasourceUid": "-100",
+          "model": {
+            "datasource": {
+              "name": "Expression",
+              "type": "__expr__",
+              "uid": "__expr__"
+            },
+            "expression": "$B > 0.9",
+            "hide": false,
+            "intervalMs": 1000,
+            "maxDataPoints": 43200,
+            "refId": "C",
+            "type": "math"
+          }
+        }
+      ],
+      "intervalSeconds": 60,
+      "no_data_state": "NoData",
+      "exec_err_state": "Alerting"
+    }
+  },
+    {
+      "for": "5m",
+      "annotations": {
+        "__dashboardUid__": "aptible-gen-app-dash",
+        "__panelId__": "3"
+      },
+      "grafana_alert": {
+        "title": "App Memory Utilization",
+        "condition": "C",
+        "data": [
+          {
+            "refId": "A",
+            "queryType": "",
+            "relativeTimeRange": {
+              "from": 300,
+              "to": 0
+            },
+            "datasourceUid": "aptible-gen-influx-source",
+            "model": {
+              "alias": "$tag_environment - $tag_app - $tag_service - $tag_host",
+              "datasource": {
+                "type": "influxdb",
+                "uid": "aptible-gen-influx-source"
+              },
+              "hide": false,
+              "intervalMs": 1000,
+              "limit": "",
+              "maxDataPoints": 43200,
+              "measurement": "",
+              "policy": "",
+              "query": "SELECT MAX(\"memory_rss_mb\") / MAX(\"memory_limit_mb\")\nFROM \"metrics\"\nWHERE $timeFilter\nAND \"app\" != \"\"\nGROUP BY\n        time($__interval),\n        \"environment\", \"app\", \"service\", \"host\"",
+              "rawQuery": true,
+              "refId": "A",
+              "resultFormat": "time_series",
+              "slimit": "",
+              "tz": ""
+            }
+          },
+          {
+            "refId": "B",
+            "queryType": "",
+            "relativeTimeRange": {
+              "from": 0,
+              "to": 0
+            },
+            "datasourceUid": "-100",
+            "model": {
+              "datasource": {
+                "type": "__expr__",
+                "uid": "-100"
+              },
+              "expression": "A",
+              "hide": false,
+              "intervalMs": 1000,
+              "maxDataPoints": 43200,
+              "reducer": "last",
+              "refId": "B",
+              "settings": {
+                "mode": "dropNN"
+              },
+              "type": "reduce"
+            }
+          },
+          {
+            "refId": "C",
+            "queryType": "",
+            "relativeTimeRange": {
+              "from": 0,
+              "to": 0
+            },
+            "datasourceUid": "-100",
+            "model": {
+              "datasource": {
+                "name": "Expression",
+                "type": "__expr__",
+                "uid": "__expr__"
+              },
+              "expression": "$B > 0.9",
+              "hide": false,
+              "intervalMs": 1000,
+              "maxDataPoints": 43200,
+              "refId": "C",
+              "type": "math"
+            }
+          }
+        ],
+        "intervalSeconds": 60,
+        "no_data_state": "NoData",
+        "exec_err_state": "Alerting"
+      }
+    },
+    {
+      "for": "3m",
+      "annotations": {
+        "__dashboardUid__": "aptible-gen-database-dash",
+        "__panelId__": "5"
+      },
+      "grafana_alert": {
+        "title": "Database CPU Utilization",
+        "condition": "C",
+        "data": [
+          {
+            "refId": "A",
+            "queryType": "",
+            "relativeTimeRange": {
+              "from": 300,
+              "to": 0
+            },
+            "datasourceUid": "aptible-gen-influx-source",
+            "model": {
+              "alias": "$tag_environment - $tag_database",
+              "datasource": {
+                "type": "influxdb",
+                "uid": "aptible-gen-influx-source"
+              },
+              "hide": false,
+              "intervalMs": 1000,
+              "limit": "",
+              "maxDataPoints": 43200,
+              "measurement": "",
+              "policy": "",
+              "query": "SELECT (MAX(\"milli_cpu_usage\") / 1000) / (MAX(\"memory_limit_mb\") / 4096)\nFROM \"metrics\"\nWHERE $timeFilter\nAND \"database\" != \"\"\nGROUP BY\n        time($__interval),\n        \"environment\", \"database\"",
+              "rawQuery": true,
+              "refId": "A",
+              "resultFormat": "time_series",
+              "slimit": "",
+              "tz": ""
+            }
+          },
+          {
+            "refId": "B",
+            "queryType": "",
+            "relativeTimeRange": {
+              "from": 0,
+              "to": 0
+            },
+            "datasourceUid": "-100",
+            "model": {
+              "datasource": {
+                "type": "__expr__",
+                "uid": "-100"
+              },
+              "expression": "A",
+              "hide": false,
+              "intervalMs": 1000,
+              "maxDataPoints": 43200,
+              "reducer": "last",
+              "refId": "B",
+              "settings": {
+                "mode": "dropNN"
+              },
+              "type": "reduce"
+            }
+          },
+          {
+            "refId": "C",
+            "queryType": "",
+            "relativeTimeRange": {
+              "from": 0,
+              "to": 0
+            },
+            "datasourceUid": "-100",
+            "model": {
+              "datasource": {
+                "name": "Expression",
+                "type": "__expr__",
+                "uid": "__expr__"
+              },
+              "expression": "$B > 0.9",
+              "hide": false,
+              "intervalMs": 1000,
+              "maxDataPoints": 43200,
+              "refId": "C",
+              "type": "math"
+            }
+          }
+        ],
+        "intervalSeconds": 60,
+        "no_data_state": "NoData",
+        "exec_err_state": "Alerting"
+      }
+    },
+    {
+      "for": "5m",
+      "annotations": {
+        "__dashboardUid__": "aptible-gen-database-dash",
+        "__panelId__": "7"
+      },
+      "grafana_alert": {
+        "title": "Database Disk Utilization",
+        "condition": "C",
+        "data": [
+          {
+            "refId": "A",
+            "queryType": "",
+            "relativeTimeRange": {
+              "from": 300,
+              "to": 0
+            },
+            "datasourceUid": "aptible-gen-influx-source",
+            "model": {
+              "alias": "$tag_environment - $tag_database",
+              "datasource": {
+                "type": "influxdb",
+                "uid": "aptible-gen-influx-source"
+              },
+              "hide": false,
+              "intervalMs": 1000,
+              "limit": "",
+              "maxDataPoints": 43200,
+              "measurement": "",
+              "policy": "",
+              "query": "SELECT MAX(\"disk_usage_mb\") / MAX(\"disk_limit_mb\")\nFROM \"metrics\"\nWHERE $timeFilter\nAND \"database\" != \"\"\nGROUP BY\n        time($__interval),\n        \"environment\", \"database\"",
+              "rawQuery": true,
+              "refId": "A",
+              "resultFormat": "time_series",
+              "slimit": "",
+              "tz": ""
+            }
+          },
+          {
+            "refId": "B",
+            "queryType": "",
+            "relativeTimeRange": {
+              "from": 0,
+              "to": 0
+            },
+            "datasourceUid": "-100",
+            "model": {
+              "datasource": {
+                "type": "__expr__",
+                "uid": "-100"
+              },
+              "expression": "A",
+              "hide": false,
+              "intervalMs": 1000,
+              "maxDataPoints": 43200,
+              "reducer": "last",
+              "refId": "B",
+              "settings": {
+                "mode": "dropNN"
+              },
+              "type": "reduce"
+            }
+          },
+          {
+            "refId": "C",
+            "queryType": "",
+            "relativeTimeRange": {
+              "from": 0,
+              "to": 0
+            },
+            "datasourceUid": "-100",
+            "model": {
+              "datasource": {
+                "name": "Expression",
+                "type": "__expr__",
+                "uid": "__expr__"
+              },
+              "expression": "$B > 0.9",
+              "hide": false,
+              "intervalMs": 1000,
+              "maxDataPoints": 43200,
+              "refId": "C",
+              "type": "math"
+            }
+          }
+        ],
+        "intervalSeconds": 60,
+        "no_data_state": "NoData",
+        "exec_err_state": "Alerting"
+      }
+    },
+    {
+      "for": "5m",
+      "annotations": {
+        "__dashboardUid__": "aptible-gen-database-dash",
+        "__panelId__": "3"
+      },
+      "grafana_alert": {
+        "title": "Database Memory Utilization",
+        "condition": "C",
+        "data": [
+          {
+            "refId": "A",
+            "queryType": "",
+            "relativeTimeRange": {
+              "from": 300,
+              "to": 0
+            },
+            "datasourceUid": "aptible-gen-influx-source",
+            "model": {
+              "alias": "$tag_environment - $tag_database",
+              "datasource": {
+                "type": "influxdb",
+                "uid": "aptible-gen-influx-source"
+              },
+              "hide": false,
+              "intervalMs": 1000,
+              "limit": "",
+              "maxDataPoints": 43200,
+              "measurement": "",
+              "policy": "",
+              "query": "SELECT MAX(\"memory_rss_mb\") / MAX(\"memory_limit_mb\")\nFROM \"metrics\"\nWHERE $timeFilter\nAND \"database\" != \"\"\nGROUP BY\n        time($__interval),\n        \"environment\", \"database\"",
+              "rawQuery": true,
+              "refId": "A",
+              "resultFormat": "time_series",
+              "slimit": "",
+              "tz": ""
+            }
+          },
+          {
+            "refId": "B",
+            "queryType": "",
+            "relativeTimeRange": {
+              "from": 0,
+              "to": 0
+            },
+            "datasourceUid": "-100",
+            "model": {
+              "datasource": {
+                "type": "__expr__",
+                "uid": "-100"
+              },
+              "downsampler": "mean",
+              "expression": "A",
+              "hide": false,
+              "intervalMs": 1000,
+              "maxDataPoints": 43200,
+              "reducer": "last",
+              "refId": "B",
+              "settings": {
+                "mode": "dropNN"
+              },
+              "type": "reduce",
+              "upsampler": "fillna"
+            }
+          },
+          {
+            "refId": "C",
+            "queryType": "",
+            "relativeTimeRange": {
+              "from": 0,
+              "to": 0
+            },
+            "datasourceUid": "-100",
+            "model": {
+              "datasource": {
+                "name": "Expression",
+                "type": "__expr__",
+                "uid": "__expr__"
+              },
+              "expression": "$B > 0.9",
+              "hide": false,
+              "intervalMs": 1000,
+              "maxDataPoints": 43200,
+              "refId": "C",
+              "type": "math"
+            }
+          }
+        ],
+        "intervalSeconds": 60,
+        "no_data_state": "NoData",
+        "exec_err_state": "Alerting"
+      }
+    }
+  ]
+}

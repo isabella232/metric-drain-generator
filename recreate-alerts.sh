@@ -1,7 +1,8 @@
 #!/bin/sh
 # generate-dashboards.sh
 
-# Create or update grafana dashboards using the provided data or by pulling it from the App's config
+# Delete then create the alert rules defined in grafana/alert-group.json
+# This isn't done by generate-dashboards.sh because it clears the rule's state history
 set -o nounset
 
 if [ "$#" -gt 2 ]; then
@@ -29,19 +30,14 @@ if [ -z "${GRAFANA_USER:-}" ] || [ -z "${GRAFANA_URL:-}" ]; then
 fi
 
 basic_auth="${GRAFANA_USER}:${GRAFANA_PASSWORD}"
+alert_url="${GRAFANA_URL}/api/ruler/grafana/api/v1/rules/Aptible%20Generated"
 
-echo 'Creating folder for generated dashboards...'
-curl -u "$basic_auth" -X POST -H "Content-Type: application/json" --data-binary '@grafana/folder.json' "${GRAFANA_URL}/api/folders"
+echo 'Deleting alerts...'
+curl -u "$basic_auth" -X POST -H "Content-Type: application/json" --data-binary '@grafana/empty-alert-group.json' "$alert_url"
 echo
 
-echo 'Generating dashboards...'
-for dashboard in grafana/dashboards/*.json; do
-  curl -u "$basic_auth" -X POST -H "Content-Type: application/json" --data-binary "@${dashboard}" "${GRAFANA_URL}/api/dashboards/db"
-  echo
-done
-
 echo 'Creating alerts...'
-curl -u "$basic_auth" -X POST -H "Content-Type: application/json" --data-binary '@grafana/alert-group.json' "${GRAFANA_URL}/api/ruler/grafana/api/v1/rules/Aptible%20Generated"
+curl -u "$basic_auth" -X POST -H "Content-Type: application/json" --data-binary '@grafana/alert-group.json' "$alert_url"
 echo
 
 echo 'Done!'

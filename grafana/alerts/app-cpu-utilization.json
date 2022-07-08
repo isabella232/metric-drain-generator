@@ -1,0 +1,96 @@
+{
+  "uid": "aptible-gen-app-cpu-alert",
+  "orgID": 1,
+  "folderUID": "aptible-gen-folder",
+  "ruleGroup": "aptible-generated",
+  "title": "App CPU Utilization",
+  "condition": "C",
+  "data": [
+    {
+      "refId": "A",
+      "queryType": "",
+      "relativeTimeRange": { "from": 600, "to": 0 },
+      "datasourceUid": "aptible-gen-influx-source",
+      "model": {
+        "alias": "$tag_environment - $tag_app - $tag_service - $tag_host",
+        "datasource": {
+          "type": "influxdb",
+          "uid": "aptible-gen-influx-source"
+        },
+        "hide": false,
+        "intervalMs": 1000,
+        "limit": "",
+        "maxDataPoints": 43200,
+        "measurement": "",
+        "policy": "",
+        "query": "SELECT (MEAN(\"milli_cpu_usage\") / 1000) / (MAX(\"memory_limit_mb\") / 4096)\nFROM \"metrics\"\nWHERE $timeFilter\nAND \"app\" != \"\"\nGROUP BY\n        time($__interval),\n        \"environment\", \"app\", \"service\", \"host\"",
+        "rawQuery": true,
+        "refId": "A",
+        "resultFormat": "time_series",
+        "slimit": "",
+        "tz": ""
+      }
+    },
+    {
+      "refId": "B",
+      "queryType": "",
+      "relativeTimeRange": { "from": 0, "to": 0 },
+      "datasourceUid": "-100",
+      "model": {
+        "conditions": [
+          {
+            "evaluator": { "params": [3], "type": "gt" },
+            "operator": { "type": "and" },
+            "query": { "params": ["A"] },
+            "reducer": { "params": [], "type": "last" },
+            "type": "query"
+          }
+        ],
+        "datasource": { "type": "__expr__", "uid": "-100" },
+        "expression": "A",
+        "hide": false,
+        "intervalMs": 1000,
+        "maxDataPoints": 43200,
+        "reducer": "max",
+        "refId": "B",
+        "settings": { "mode": "dropNN" },
+        "type": "reduce"
+      }
+    },
+    {
+      "refId": "C",
+      "queryType": "",
+      "relativeTimeRange": { "from": 0, "to": 0 },
+      "datasourceUid": "-100",
+      "model": {
+        "conditions": [
+          {
+            "evaluator": { "params": [0, 0], "type": "gt" },
+            "operator": { "type": "and" },
+            "query": { "params": [] },
+            "reducer": { "params": [], "type": "avg" },
+            "type": "query"
+          }
+        ],
+        "datasource": {
+          "name": "Expression",
+          "type": "__expr__",
+          "uid": "__expr__"
+        },
+        "expression": "$B \u003e 0.9",
+        "hide": false,
+        "intervalMs": 1000,
+        "maxDataPoints": 43200,
+        "refId": "C",
+        "type": "math"
+      }
+    }
+  ],
+  "noDataState": "NoData",
+  "execErrState": "Alerting",
+  "for": 300000000000,
+  "annotations": {
+    "__dashboardUid__": "aptible-gen-app-dash",
+    "__panelId__": "5"
+  }
+}

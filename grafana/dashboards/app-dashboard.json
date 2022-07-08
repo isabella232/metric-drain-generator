@@ -286,7 +286,7 @@
           {
             "alias": "$tag_environment - $tag_app - $tag_service - $tag_host",
             "hide": false,
-            "query": "SELECT MEAN(\"milli_cpu_usage\") / 1000\nFROM \"metrics\"\nWHERE $timeFilter\nAND \"environment\" =~ /^$environment$/\nAND \"app\" =~ /^$app$/\nAND \"service\" =~ /^$service$/\nAND \"host\" =~ /^$host$/\nGROUP BY\n        time($__interval),\n        \"environment\", \"app\", \"service\", \"host\"\n        fill(null)",
+            "query": "SELECT MAX(\"milli_cpu_usage\") / 1000\nFROM \"metrics\"\nWHERE $timeFilter\nAND \"environment\" =~ /^$environment$/\nAND \"app\" =~ /^$app$/\nAND \"service\" =~ /^$service$/\nAND \"host\" =~ /^$host$/\nGROUP BY\n        time($__interval),\n        \"environment\", \"app\", \"service\", \"host\"\n        fill(null)",
             "rawQuery": true,
             "refId": "A",
             "resultFormat": "time_series"
@@ -380,7 +380,7 @@
           {
             "alias": "$tag_environment - $tag_app - $tag_service - $tag_host",
             "hide": false,
-            "query": "SELECT (MEAN(\"milli_cpu_usage\") / 1000) / (MAX(\"memory_limit_mb\") / 4096)\nFROM \"metrics\"\nWHERE $timeFilter\nAND \"environment\" =~ /^$environment$/\nAND \"app\" =~ /^$app$/\nAND \"service\" =~ /^$service$/\nAND \"host\" =~ /^$host$/\nGROUP BY\n        time($__interval),\n        \"environment\", \"app\", \"service\", \"host\"\n        fill(null)",
+            "query": "SELECT (MAX(\"milli_cpu_usage\") / 1000) / (MAX(\"memory_limit_mb\") / 4096)\nFROM \"metrics\"\nWHERE $timeFilter\nAND \"environment\" =~ /^$environment$/\nAND \"app\" =~ /^$app$/\nAND \"service\" =~ /^$service$/\nAND \"host\" =~ /^$host$/\nGROUP BY\n        time($__interval),\n        \"environment\", \"app\", \"service\", \"host\"\n        fill(null)",
             "rawQuery": true,
             "refId": "A",
             "resultFormat": "time_series"
