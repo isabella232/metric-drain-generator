@@ -14,7 +14,7 @@ connection details are provided via environment variables.
 
 ## Usage
 
-### Create the Drain
+### Create the drain
 ```shell
 ./create-drain-stack.sh enviroment_handle
 ```
@@ -35,7 +35,7 @@ export METRICS_ENVIRONMENT=aptible-metrics
 ./create-drain-stack.sh aptible-dev
 ```
 
-### Create Grafana Dashboards
+### Create Grafana dashboards
 
 ```shell
 ./generate-dashboards.sh [environment_handle] [grafana_handle=grafana]
@@ -43,11 +43,40 @@ export METRICS_ENVIRONMENT=aptible-metrics
 
 Creates a set of useful dashboards for the metrics provided by Metric Drains (or
 updates them if they already exist). All of the dashboards defined in
-`grafana/dashboards` will be applied.
+`grafana/dashboards` will be applied. Also creates alert rules for resource
+utilization if they don't exist.
 
 The credentials and connection details for Grafana are extracted from the
 specified Aptible App's configuration or they can be supplied through the
 `GRAFANA_USER`, `GRAFANA_PASSWORD`, and `GRAFANA_URL` environment variables.
+
+### Re-create Grafana alerts
+
+```shell
+./recreate-alerts.sh [environment_handle] [grafana_handle=grafana]
+```
+
+Unfortunately it's not quite as easy to update alert rules as it is dashboards
+so this script deletes the existing ones and re-creates them. The only downside
+of this is that the alert rule state history is cleared. The Dashboard will
+show the past alerts and alert notifications that have been sent out will still
+exist.
+
+This script handles credentials and connection details the same way as
+`generate-dashboards.sh`. See above for details.
+
+### Set up alert notifications
+
+This repo does not configure alert notifications but they can be configured
+relatively easily through the Grafana UI. All you need to do is:
+
+1. Create a contact point such as an email list or Slack integration at Alerting
+\> Contact points (`https://$GRAFANA_URL/alerting/notifications`).
+2. Add the contact point to a notification policy at Alerting > Notification
+policies (`https://$GRAFANA_URL/alerting/routes`).
+ 
+The generated alert rules are labeled with `alertgroup=aptible-generated` so
+this can be used to create a specific policy for these alerts.
 
 ## Examples
 
@@ -82,3 +111,7 @@ export METRICS_ENVIRONMENT=aptible-metrics
 ## Database Metrics
 
 ![Database Dashboard](./screenshots/database-dashboard.png)
+
+## Alerts
+
+![Alerts](./screenshots/alert-rules.png)
