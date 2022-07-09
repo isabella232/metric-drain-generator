@@ -78,7 +78,7 @@ environment="$1"
 : ${DRAIN_HANDLE:="influx-drain"}
 : ${POSTGRES_HANDLE:="pg-grafana"}
 : ${GRAFANA_HANDLE:="grafana"}
-: ${GRAFANA_IMAGE:="latest"}
+: ${GRAFANA_TAG:="latest"}
 : ${GRAFANA_DB_USER:="grafana"}
 : ${GRAFANA_DB_PASSWORD:="$(gen_password)"}
 : ${GRAFANA_ADMIN_PASSWORD:="$(gen_password)"}
@@ -119,7 +119,7 @@ EOF
   echo 'Creating Grafana app...'
   parse_url "$pg_url"
   aptible apps:create --environment "$METRICS_ENVIRONMENT" "$GRAFANA_HANDLE"
-  aptible deploy --environment "$METRICS_ENVIRONMENT" --app "$GRAFANA_HANDLE" --docker-image "grafana/grafana:${GRAFANA_IMAGE}" \
+  aptible deploy --environment "$METRICS_ENVIRONMENT" --app "$GRAFANA_HANDLE" --docker-image "grafana/grafana:${GRAFANA_TAG}" \
     "GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}" \
     "GF_SECURITY_SECRET_KEY=${GRAFANA_SECRET_KEY}" \
     "GF_DEFAULT_INSTANCE_NAME=aptible" \

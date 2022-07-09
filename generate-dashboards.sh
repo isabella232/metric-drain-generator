@@ -10,7 +10,7 @@ if [ "$#" -gt 2 ]; then
 fi
 
 # Configuration
-METRICS_ENVIRONMENT="${1:-"$METRICS_ENVIRONMENT"}"
+METRICS_ENVIRONMENT="${1:-"${METRICS_ENVIRONMENT:-}"}"
 GRAFANA_HANDLE="${2:-"${GRAFANA_HANDLE:-grafana}"}"
 
 if [ -z "${GRAFANA_USER:-}" ] || [ -z "${GRAFANA_URL:-}" ]; then

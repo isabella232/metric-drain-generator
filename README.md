@@ -15,6 +15,7 @@ connection details are provided via environment variables.
 ## Usage
 
 ### Create the drain
+
 ```shell
 ./create-drain-stack.sh enviroment_handle
 ```
@@ -23,17 +24,13 @@ Provisions and configures an InfluxDB Database, PostgreSQL Database, Grafana
 App, and InfluxDB Metric Drain in the specified Environment if they do not
 exist. If the Grafana App doesn't exist `./generate-dashboards` is run on it.
 
-`$METRICS_ENVIRONEMNT` can be used to specify a different environment for the
+`METRICS_ENVIRONEMNT` can be used to specify a different environment for the
 InfluxDB Database, PostgreSQL Database, and Grafana App. This can be used to
 configure multiple environments to send metrics to the same destination. For
 example:
 
-```shell
-export METRICS_ENVIRONMENT=aptible-metrics
-./create-drain-stack.sh aptible-production
-./create-drain-stack.sh aptible-staging
-./create-drain-stack.sh aptible-dev
-```
+Note: This repo was tested against Grafana version `9.0.2`. The version can be
+changed by setting `GRAFANA_TAG`. The default is `latest`.
 
 ### Create Grafana dashboards
 
